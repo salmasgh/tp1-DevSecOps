@@ -1,0 +1,93 @@
+Run started:2026-10-08 12:16:03.191719+00:00
+
+Test results:
+>> Issue: [B404:blacklist] Consider possible security implications associated with the subprocess module.
+   Severity: Low   Confidence: High
+   CWE: CWE-78 (https://cwe.mitre.org/data/definitions/78.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_imports.html#b404-import-subprocess
+   Location: ./main.py:5:0
+4	import sqlite3
+5	import subprocess
+6	
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: 'super-secret-key-12345'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html
+   Location: ./main.py:12:13
+11	# VULN: secret en dur dans le code source (Bandit B105)
+12	SECRET_KEY = "super-secret-key-12345"
+13	
+
+--------------------------------------------------
+>> Issue: [B608:hardcoded_sql_expressions] Possible SQL injection vector through string-based query construction.
+   Severity: Medium   Confidence: Low
+   CWE: CWE-89 (https://cwe.mitre.org/data/definitions/89.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b608_hardcoded_sql_expressions.html
+   Location: ./main.py:34:14
+33	    # VULN: injection SQL via f-string (Bandit B608)
+34	    query = f"SELECT id, name FROM users WHERE name = '{name}'"
+35	    rows = conn.execute(query).fetchall()
+
+--------------------------------------------------
+>> Issue: [B602:subprocess_popen_with_shell_equals_true] subprocess call with shell=True identified, security issue.
+   Severity: High   Confidence: High
+   CWE: CWE-78 (https://cwe.mitre.org/data/definitions/78.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b602_subprocess_popen_with_shell_equals_true.html
+   Location: ./main.py:44:13
+43	    result = subprocess.run(
+44	        f"ping -c 1 {host}", shell=True, capture_output=True, text=True
+45	    )
+46	    return {"returncode": result.returncode, "output": result.stdout}
+47	
+
+--------------------------------------------------
+>> Issue: [B324:hashlib] Use of weak MD5 hash for security. Consider usedforsecurity=False
+   Severity: High   Confidence: High
+   CWE: CWE-327 (https://cwe.mitre.org/data/definitions/327.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b324_hashlib.html
+   Location: ./main.py:52:13
+51	    # VULN: mot de passe hache avec MD5, algorithme faible (Bandit B324)
+52	    hashed = hashlib.md5(password.encode()).hexdigest()
+53	    conn = get_db()
+
+--------------------------------------------------
+>> Issue: [B506:yaml_load] Use of unsafe yaml load. Allows instantiation of arbitrary objects. Consider yaml.safe_load().
+   Severity: Medium   Confidence: High
+   CWE: CWE-20 (https://cwe.mitre.org/data/definitions/20.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b506_yaml_load.html
+   Location: ./main.py:65:13
+64	    # VULN: deserialisation dangereuse avec yaml.Loader (Bandit B506)
+65	    config = yaml.load(data, Loader=yaml.Loader)
+66	    return {"config": config}
+
+--------------------------------------------------
+>> Issue: [B501:request_with_no_cert_validation] Call to requests with verify=False disabling SSL certificate checks, security issue.
+   Severity: High   Confidence: High
+   CWE: CWE-295 (https://cwe.mitre.org/data/definitions/295.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b501_request_with_no_cert_validation.html
+   Location: ./main.py:72:8
+71	    # VULN: verification du certificat TLS desactivee (Bandit B501)
+72	    r = requests.get(url, verify=False, timeout=5)
+73	    return {"status_code": r.status_code, "body": r.text[:500]}
+
+--------------------------------------------------
+
+Code scanned:
+	Total lines of code: 51
+	Total lines skipped (#nosec): 0
+	Total potential issues skipped due to specifically being disabled (e.g., #nosec BXXX): 0
+
+Run metrics:
+	Total issues (by severity):
+		Undefined: 0
+		Low: 2
+		Medium: 2
+		High: 3
+	Total issues (by confidence):
+		Undefined: 0
+		Low: 1
+		Medium: 1
+		High: 5
+Files skipped (0):

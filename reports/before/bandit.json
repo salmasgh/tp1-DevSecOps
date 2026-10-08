@@ -1,0 +1,176 @@
+{
+  "errors": [],
+  "generated_at": "2026-10-08T12:16:03Z",
+  "metrics": {
+    "./main.py": {
+      "CONFIDENCE.HIGH": 5,
+      "CONFIDENCE.LOW": 1,
+      "CONFIDENCE.MEDIUM": 1,
+      "CONFIDENCE.UNDEFINED": 0,
+      "SEVERITY.HIGH": 3,
+      "SEVERITY.LOW": 2,
+      "SEVERITY.MEDIUM": 2,
+      "SEVERITY.UNDEFINED": 0,
+      "loc": 51,
+      "nosec": 0,
+      "skipped_tests": 0
+    },
+    "_totals": {
+      "CONFIDENCE.HIGH": 5,
+      "CONFIDENCE.LOW": 1,
+      "CONFIDENCE.MEDIUM": 1,
+      "CONFIDENCE.UNDEFINED": 0,
+      "SEVERITY.HIGH": 3,
+      "SEVERITY.LOW": 2,
+      "SEVERITY.MEDIUM": 2,
+      "SEVERITY.UNDEFINED": 0,
+      "loc": 51,
+      "nosec": 0,
+      "skipped_tests": 0
+    }
+  },
+  "results": [
+    {
+      "code": "4 import sqlite3\n5 import subprocess\n6 \n",
+      "col_offset": 0,
+      "end_col_offset": 17,
+      "filename": "./main.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 78,
+        "link": "https://cwe.mitre.org/data/definitions/78.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Consider possible security implications associated with the subprocess module.",
+      "line_number": 5,
+      "line_range": [
+        5
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_imports.html#b404-import-subprocess",
+      "test_id": "B404",
+      "test_name": "blacklist"
+    },
+    {
+      "code": "11 # VULN: secret en dur dans le code source (Bandit B105)\n12 SECRET_KEY = \"super-secret-key-12345\"\n13 \n",
+      "col_offset": 13,
+      "end_col_offset": 37,
+      "filename": "./main.py",
+      "issue_confidence": "MEDIUM",
+      "issue_cwe": {
+        "id": 259,
+        "link": "https://cwe.mitre.org/data/definitions/259.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Possible hardcoded password: 'super-secret-key-12345'",
+      "line_number": 12,
+      "line_range": [
+        12
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html",
+      "test_id": "B105",
+      "test_name": "hardcoded_password_string"
+    },
+    {
+      "code": "33     # VULN: injection SQL via f-string (Bandit B608)\n34     query = f\"SELECT id, name FROM users WHERE name = '{name}'\"\n35     rows = conn.execute(query).fetchall()\n",
+      "col_offset": 14,
+      "end_col_offset": 55,
+      "filename": "./main.py",
+      "issue_confidence": "LOW",
+      "issue_cwe": {
+        "id": 89,
+        "link": "https://cwe.mitre.org/data/definitions/89.html"
+      },
+      "issue_severity": "MEDIUM",
+      "issue_text": "Possible SQL injection vector through string-based query construction.",
+      "line_number": 34,
+      "line_range": [
+        34
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b608_hardcoded_sql_expressions.html",
+      "test_id": "B608",
+      "test_name": "hardcoded_sql_expressions"
+    },
+    {
+      "code": "43     result = subprocess.run(\n44         f\"ping -c 1 {host}\", shell=True, capture_output=True, text=True\n45     )\n46     return {\"returncode\": result.returncode, \"output\": result.stdout}\n47 \n",
+      "col_offset": 13,
+      "end_col_offset": 5,
+      "filename": "./main.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 78,
+        "link": "https://cwe.mitre.org/data/definitions/78.html"
+      },
+      "issue_severity": "HIGH",
+      "issue_text": "subprocess call with shell=True identified, security issue.",
+      "line_number": 44,
+      "line_range": [
+        43,
+        44,
+        45
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b602_subprocess_popen_with_shell_equals_true.html",
+      "test_id": "B602",
+      "test_name": "subprocess_popen_with_shell_equals_true"
+    },
+    {
+      "code": "51     # VULN: mot de passe hache avec MD5, algorithme faible (Bandit B324)\n52     hashed = hashlib.md5(password.encode()).hexdigest()\n53     conn = get_db()\n",
+      "col_offset": 13,
+      "end_col_offset": 43,
+      "filename": "./main.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 327,
+        "link": "https://cwe.mitre.org/data/definitions/327.html"
+      },
+      "issue_severity": "HIGH",
+      "issue_text": "Use of weak MD5 hash for security. Consider usedforsecurity=False",
+      "line_number": 52,
+      "line_range": [
+        52
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b324_hashlib.html",
+      "test_id": "B324",
+      "test_name": "hashlib"
+    },
+    {
+      "code": "64     # VULN: deserialisation dangereuse avec yaml.Loader (Bandit B506)\n65     config = yaml.load(data, Loader=yaml.Loader)\n66     return {\"config\": config}\n",
+      "col_offset": 13,
+      "end_col_offset": 48,
+      "filename": "./main.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 20,
+        "link": "https://cwe.mitre.org/data/definitions/20.html"
+      },
+      "issue_severity": "MEDIUM",
+      "issue_text": "Use of unsafe yaml load. Allows instantiation of arbitrary objects. Consider yaml.safe_load().",
+      "line_number": 65,
+      "line_range": [
+        65
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b506_yaml_load.html",
+      "test_id": "B506",
+      "test_name": "yaml_load"
+    },
+    {
+      "code": "71     # VULN: verification du certificat TLS desactivee (Bandit B501)\n72     r = requests.get(url, verify=False, timeout=5)\n73     return {\"status_code\": r.status_code, \"body\": r.text[:500]}\n",
+      "col_offset": 8,
+      "end_col_offset": 50,
+      "filename": "./main.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 295,
+        "link": "https://cwe.mitre.org/data/definitions/295.html"
+      },
+      "issue_severity": "HIGH",
+      "issue_text": "Call to requests with verify=False disabling SSL certificate checks, security issue.",
+      "line_number": 72,
+      "line_range": [
+        72
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b501_request_with_no_cert_validation.html",
+      "test_id": "B501",
+      "test_name": "request_with_no_cert_validation"
+    }
+  ]
+}
