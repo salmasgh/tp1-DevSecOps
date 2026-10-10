@@ -39,9 +39,11 @@ def get_user(name: str):
 
 @app.get("/ping")
 def ping(host: str):
-    # VULN: injection de commande via subprocess shell=True (Bandit B602)
     result = subprocess.run(
-        f"ping -c 1 {host}", shell=True, capture_output=True, text=True
+        ["ping", "-c", "1", host], 
+        shell=False, 
+        capture_output=True, 
+        text=True
     )
     return {"returncode": result.returncode, "output": result.stdout}
 
