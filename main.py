@@ -30,9 +30,9 @@ def get_db():
 @app.get("/user")
 def get_user(name: str):
     conn = get_db()
-    # VULN: injection SQL via f-string (Bandit B608)
-    query = f"SELECT id, name FROM users WHERE name = '{name}'"
-    rows = conn.execute(query).fetchall()
+    rows = conn.execute(
+        "SELECT id, name FROM users WHERE name = ?", (name,)
+    ).fetchall()
     conn.close()
     return {"users": [{"id": r[0], "name": r[1]} for r in rows]}
 
