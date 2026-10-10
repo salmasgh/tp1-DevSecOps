@@ -1,0 +1,101 @@
+Run started:2026-10-10 15:17:44.163023+00:00
+
+Test results:
+>> Issue: [B404:blacklist] Consider possible security implications associated with the subprocess module.
+   Severity: Low   Confidence: High
+   CWE: CWE-78 (https://cwe.mitre.org/data/definitions/78.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_imports.html#b404-import-subprocess
+   Location: ./main.py:5:0
+4	import sqlite3
+5	import subprocess
+6	
+
+--------------------------------------------------
+>> Issue: [B105:hardcoded_password_string] Possible hardcoded password: 'super-secret-key-12345'
+   Severity: Low   Confidence: Medium
+   CWE: CWE-259 (https://cwe.mitre.org/data/definitions/259.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html
+   Location: ./main.py:12:13
+11	# VULN: secret en dur dans le code source (Bandit B105)
+12	SECRET_KEY = "super-secret-key-12345"
+13	
+
+--------------------------------------------------
+>> Issue: [B607:start_process_with_partial_path] Starting a process with a partial executable path
+   Severity: Low   Confidence: High
+   CWE: CWE-78 (https://cwe.mitre.org/data/definitions/78.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b607_start_process_with_partial_path.html
+   Location: ./main.py:42:13
+41	def ping(host: str):
+42	    result = subprocess.run(
+43	        ["ping", "-c", "1", host], 
+44	        shell=False, 
+45	        capture_output=True, 
+46	        text=True
+47	    )
+48	    return {"returncode": result.returncode, "output": result.stdout}
+
+--------------------------------------------------
+>> Issue: [B603:subprocess_without_shell_equals_true] subprocess call - check for execution of untrusted input.
+   Severity: Low   Confidence: High
+   CWE: CWE-78 (https://cwe.mitre.org/data/definitions/78.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b603_subprocess_without_shell_equals_true.html
+   Location: ./main.py:44:13
+43	        ["ping", "-c", "1", host], 
+44	        shell=False, 
+45	        capture_output=True, 
+46	        text=True
+47	    )
+48	    return {"returncode": result.returncode, "output": result.stdout}
+49	
+50	
+
+--------------------------------------------------
+>> Issue: [B324:hashlib] Use of weak MD5 hash for security. Consider usedforsecurity=False
+   Severity: High   Confidence: High
+   CWE: CWE-327 (https://cwe.mitre.org/data/definitions/327.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b324_hashlib.html
+   Location: ./main.py:54:13
+53	    # VULN: mot de passe hache avec MD5, algorithme faible (Bandit B324)
+54	    hashed = hashlib.md5(password.encode()).hexdigest()
+55	    conn = get_db()
+
+--------------------------------------------------
+>> Issue: [B506:yaml_load] Use of unsafe yaml load. Allows instantiation of arbitrary objects. Consider yaml.safe_load().
+   Severity: Medium   Confidence: High
+   CWE: CWE-20 (https://cwe.mitre.org/data/definitions/20.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b506_yaml_load.html
+   Location: ./main.py:67:13
+66	    # VULN: deserialisation dangereuse avec yaml.Loader (Bandit B506)
+67	    config = yaml.load(data, Loader=yaml.Loader)
+68	    return {"config": config}
+
+--------------------------------------------------
+>> Issue: [B501:request_with_no_cert_validation] Call to requests with verify=False disabling SSL certificate checks, security issue.
+   Severity: High   Confidence: High
+   CWE: CWE-295 (https://cwe.mitre.org/data/definitions/295.html)
+   More Info: https://bandit.readthedocs.io/en/1.9.4/plugins/b501_request_with_no_cert_validation.html
+   Location: ./main.py:74:8
+73	    # VULN: verification du certificat TLS desactivee (Bandit B501)
+74	    r = requests.get(url, verify=False, timeout=5)
+75	    return {"status_code": r.status_code, "body": r.text[:500]}
+
+--------------------------------------------------
+
+Code scanned:
+	Total lines of code: 55
+	Total lines skipped (#nosec): 0
+	Total potential issues skipped due to specifically being disabled (e.g., #nosec BXXX): 0
+
+Run metrics:
+	Total issues (by severity):
+		Undefined: 0
+		Low: 4
+		Medium: 1
+		High: 2
+	Total issues (by confidence):
+		Undefined: 0
+		Low: 0
+		Medium: 1
+		High: 6
+Files skipped (0):
